@@ -1,5 +1,3 @@
-import argparse
-
 import cv2
 
 from config import MODEL_MEAN_VALUES
@@ -11,14 +9,10 @@ from utils import (
     read_image,
 )
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--image")
-args = parser.parse_args()
 
 
-def detect_gender_age():
-    path = args.image
-    frame = read_image(path)
+def detect_gender_age(file_content):
+    frame = read_image(file_content)
 
     result_img, face_boxes = highlight_face(frame)
 
@@ -53,7 +47,6 @@ def detect_gender_age():
         text = f"{gender}, {age}"
         put_text_above_rectangle(result_img, text, cordinates)
 
-    cv2.imwrite("result.jpg", result_img)
+    return result_img
 
 
-detect_gender_age()

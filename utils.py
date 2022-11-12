@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 from config import (
     AGE_LIST,
@@ -50,9 +51,15 @@ def highlight_face(frame, conf_threshold=0.7):
     return frameOpencvDnn, faceBoxes
 
 
-def read_image(path):
+def read_image_from_path(path):
     frame = cv2.imread(path)
     return frame
+
+
+def read_image(image_content):
+    image = np.asarray(bytearray(image_content), dtype="uint8")
+    image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+    return image
 
 
 ageNet = cv2.dnn.readNet(AGE_MODEL, AGE_PROTO)
@@ -86,3 +93,11 @@ def put_text_above_rectangle(image, text, cordinates):
         2,
         cv2.LINE_AA,
     )
+
+
+
+
+def ndarray_to_b64(ndarray):
+    img = cv2.cvtColor(ndarray, cv2.COLOR_BGR2RGB)
+    _, buffer = cv2.imencode(".png", img)
+    return base64.b64encode(buffer).decode("utf-8")
